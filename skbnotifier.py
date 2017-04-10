@@ -39,25 +39,25 @@ class SkbNotifier(IPostProcessor):
             return self.notify(job, newstatus)
         return True
 
-def notify(self, job, newstatus):
-    address = self.address
-    key = self.key
-    chat_id = self.chat_id
+    def notify(self, job, newstatus):
+        address = self.address
+        key = self.key
+        chat_id = self.chat_id
 
-    msg = 'Ganga update:\n{}\n{}'.format(job.fqid, newstatus)
-    url = '{}/relay{}/sendMessage'.format(address, key)
-    payload = {
-            'text': msg,
-            'chat_id': chat_id,
-            }
-    try:
-        request = requests.post(url, json.dumps(payload))
-    except RequestException as e:
-        raise PostProcessException(str(e))
-    else:
-        if request.status_code != 200:
+        msg = 'Ganga update:\n{}\n{}'.format(job.fqid, newstatus)
+        url = '{}/relay{}/sendMessage'.format(address, key)
+        payload = {
+                'text': msg,
+                'chat_id': chat_id,
+                }
+        try:
+            request = requests.post(url, json.dumps(payload))
+        except RequestException as e:
             raise PostProcessException(str(e))
-    return True
+        else:
+            if request.status_code != 200:
+                raise PostProcessException(str(e))
+        return True
 
-    
+        
 
